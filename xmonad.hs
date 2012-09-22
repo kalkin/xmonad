@@ -35,17 +35,21 @@ import XMonad.Actions.FindEmptyWorkspace    -- (6) for finding empty workspace a
 import XMonad.Actions.CopyWindow            -- (7) for closing a window via delete protocol
 {-import XMonad.Actions.SpawnOn               -- (7) start programs on a particular WS-}
 {-import XMonad.Actions.TopicSpace            -- (7b) set a "topic" for each workspace-}
+import XMonad.ManageHook
 
 import qualified Data.Map as M
 main = xmonad $ gnomeConfig
     { terminal = "gnome-terminal -e 'screen -xRR everday'"
     , modMask = mod4Mask -- set the mod key to the windows key
     , layoutHook    = myLayoutHook
+    , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
     , workspaces    = ["www", "work", "chat", "mail", "5", "6", "7", "stat", "dwnl"] 
     }
     `additionalKeysP` 
         [ ("M-c", kill1)                    -- (7)
+        , ("M-p", spawn "exe=`gnome-do`")
         , ("M-n", refresh)                  -- (7)
+        , ("M-`", spawn "exe=`gnome-terminal -e /bin/zsh`")
         , ("M-m", viewEmptyWorkspace)       -- (6)
         , ("M-S-m", tagToEmptyWorkspace)    -- (7)
         , ("M-a", sendMessage MirrorExpand)                       -- (6)
@@ -56,6 +60,9 @@ main = xmonad $ gnomeConfig
     M.toList (planeKeys mod4Mask GConf Finite)
 
 
+myManageHook :: [ManageHook]
+myManageHook = 
+    [ resource  =? "Do"   --> doIgnore ]
 
 myLayoutHook = avoidStruts(Grid ||| tiled ||| Mirror tiled ||| Full)  -- (2) & (3) & (4)
     where
