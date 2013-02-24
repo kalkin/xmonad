@@ -38,28 +38,36 @@ import XMonad.ManageHook
 import XMonad.Hooks.ManageHelpers
 import XMonad.Layout.NoBorders
 
+import XMonad.Hooks.ManageDocks                 -- Manages the harmonic placement of docs and windows
+import XMonad.Hooks.DynamicLog                  -- Used for dzen statusbar
+import XMonad.Util.Run(spawnPipe, hPutStrLn)    -- Used to spawn dzen
 
 import qualified Data.Map as M
-main = xmonad $ gnomeConfig
-    { terminal = "gnome-terminal -e 'screen -xRR everday'"
-    , modMask = mod4Mask -- set the mod key to the windows key
-    , layoutHook    = myLayoutHook
-    , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
-    , workspaces    = ["www", "work", "chat", "mail", "5", "6", "7", "stat", "dwnl"] 
-    }
-    `additionalKeysP` 
-        [ ("M-c", kill1)                    -- (7)
-        , ("M-p", spawn "exe=`gnome-do`")
-        , ("M-n", refresh)                  -- (7)
-        , ("M-`", spawn "exe=`gnome-terminal -e /bin/zsh`")
-        , ("M-m", viewEmptyWorkspace)       -- (6)
-        , ("M-S-m", tagToEmptyWorkspace)    -- (7)
-        , ("M-a", sendMessage MirrorExpand)                       -- (6)
-        , ("M-z", sendMessage MirrorShrink)                       -- (6)
-        ]
-    `additionalKeys`
-    -- NOTE: planeKeys requires xmonad-0.9 or greater
-    M.toList (planeKeys mod4Mask GConf Finite)
+
+
+main = do 
+    xmproc <- spawnPipe "dzen2 -ta lr"
+    xmonad $ gnomeConfig
+        { terminal = "gnome-terminal -e 'screen -xRR everday'"
+        , modMask = mod4Mask -- set the mod key to the windows key
+        , layoutHook    = smartBorders (myLayoutHook)
+        , logHook = dynamicLogWithPP $ myPP xmproc
+        , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
+        , workspaces    = ["www", "work", "chat", "mail", "5", "6", "7", "stat", "dwnl"] 
+        }
+        `additionalKeysP` 
+            [ ("M-c", kill1)                    -- (7)
+            , ("M-p", spawn "exe=`gnome-do`")
+            , ("M-n", refresh)                  -- (7)
+            , ("M-`", spawn "exe=`gnome-terminal -e /bin/zsh`")
+            , ("M-m", viewEmptyWorkspace)       -- (6)
+            , ("M-S-m", tagToEmptyWorkspace)    -- (7)
+            , ("M-a", sendMessage MirrorExpand)                       -- (6)
+            , ("M-z", sendMessage MirrorShrink)                       -- (6)
+            ]
+        `additionalKeys`
+        -- NOTE: planeKeys requires xmonad-0.9 or greater
+        M.toList (planeKeys mod4Mask GConf Finite)
 
 
 myManageHook :: [ManageHook]
@@ -85,5 +93,19 @@ myLayoutHook = avoidStruts(Grid ||| tiled ||| Mirror tiled ||| Full)  -- (2) & (
 startupHook = setWMName "LG3D" -- For Java
 
 
+-- some magic which does my the logging in the dzen bar.
+myPP h = defaultPP 
+        { ppCurrent           =   dzenColor "#ebac54" "#1B1D1E" . pad
+        , ppLayout            =   dzenColor "#ebac54" "#1B1D1E" .
+                (\x -> case x of
+                "ResizableTall" -> "^i(/home/kalkin/dzen_bitmaps/tall.xbm)"
+                "Mirror ResizableTall" -> "^i(/home/kalkin/dzen_bitmaps/mtall.xbm)"
+                "Full" -> "^i(/home/kalkin/dzen_bitmaps/full.xbm)"
+                "Grid" -> "^i(/home/kalkin/dzen_bitmaps/grid.xbm)"
 
--- ¹ Smoking is seriosly enjoyed by me and others
+                )
+        , ppSep               =   "  |  "
+        {-, ppTitle   = wrap "< " " >" -}
+        , ppTitle             =   (" " ++) . dzenColor "white" "#1B1D1E" . dzenEscape
+        , ppOutput   = hPutStrLn h
+        }
