@@ -41,6 +41,8 @@ import XMonad.Layout.NoBorders
 import XMonad.Hooks.ManageDocks                 -- Manages the harmonic placement of docs and windows
 import XMonad.Hooks.DynamicLog                  -- Used for dzen statusbar
 import XMonad.Util.Run(spawnPipe, hPutStrLn)    -- Used to spawn dzen
+import XMonad.Util.Loggers
+
 
 import qualified Data.Map as M
 
@@ -105,7 +107,7 @@ myPP h = defaultPP
 
                 )
         , ppSep               =   "  |  "
-        {-, ppTitle   = wrap "< " " >" -}
         , ppTitle             =   (" " ++) . dzenColor "white" "#1B1D1E" . dzenEscape
+        , ppExtras = [ date "%d.%m.%Y %R" ]
         , ppOutput   = hPutStrLn h
         }
