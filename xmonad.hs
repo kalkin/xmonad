@@ -1,6 +1,6 @@
 -- Information
 -- {{{
---  Last Modified [ 2012-05-10 ]
+--  Last Modified [ 2013-02-23 ]
 -- File:    ~/.xmonad/xmonad.hs
 -- Author:  kalkin-
 -- Purpose  config file for the xmonad window manager
@@ -24,6 +24,7 @@ import XMonad.Util.EZConfig
 
 -- Hooks -----------------------------------------------------
 import XMonad.Hooks.ManageDocks             -- (2)  automatically avoid covering my status bar with windows
+import XMonad.Hooks.SetWMName
 
 -- Layout -- ----------------------------------------------------
 import XMonad.Layout.Grid                   -- (3)  grid layout
@@ -77,6 +78,9 @@ myLayoutHook = avoidStruts(Grid ||| tiled ||| Mirror tiled ||| Full)  -- (2) & (
  
      -- Percent of screen to increment by when resizing panes
      delta   = 3/100
+
+startupHook = setWMName "LG3D" -- For Java
+
 
 
 -- ¹ Smoking is seriosly enjoyed by me and others
