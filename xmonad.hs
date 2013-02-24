@@ -34,8 +34,6 @@ import XMonad.Layout.ResizableTile          -- (5)  resize non-master windows to
 -- Actions ---------------------------------------------------
 import XMonad.Actions.FindEmptyWorkspace    -- (6) for finding empty workspace and tagging windows to it 
 import XMonad.Actions.CopyWindow            -- (7) for closing a window via delete protocol
-{-import XMonad.Actions.SpawnOn               -- (7) start programs on a particular WS-}
-{-import XMonad.Actions.TopicSpace            -- (7b) set a "topic" for each workspace-}
 import XMonad.ManageHook
 
 import qualified Data.Map as M
