@@ -43,6 +43,9 @@ import XMonad.Hooks.DynamicLog                  -- Used for dzen statusbar
 import XMonad.Util.Run(spawnPipe, hPutStrLn)    -- Used to spawn dzen
 import XMonad.Util.Loggers
 
+import XMonad.Prompt
+import XMonad.Prompt.RunOrRaise
+
 
 import qualified Data.Map as M
 
@@ -59,12 +62,12 @@ main = do
         }
         `additionalKeysP` 
             [ ("M-c", kill1)                    -- (7)
-            , ("M-p", spawn "exe=`gnome-do`")
-            , ("M-n", refresh)                  -- (7)
-            , ("M-`", spawn "exe=`gnome-terminal -e /bin/zsh`")
-            , ("M-m", viewEmptyWorkspace)       -- (6)
             , ("M-S-m", tagToEmptyWorkspace)    -- (7)
+            , ("M-`", spawn "exe=`gnome-terminal -e /bin/zsh`")
             , ("M-a", sendMessage MirrorExpand)                       -- (6)
+            , ("M-m", viewEmptyWorkspace)       -- (6)
+            , ("M-n", refresh)                  -- (7)
+            , ("M-p", runOrRaisePrompt defaultXPConfig)
             , ("M-z", sendMessage MirrorShrink)                       -- (6)
             ]
         `additionalKeys`
