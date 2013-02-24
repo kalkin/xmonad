@@ -35,6 +35,9 @@ import XMonad.Layout.ResizableTile          -- (5)  resize non-master windows to
 import XMonad.Actions.FindEmptyWorkspace    -- (6) for finding empty workspace and tagging windows to it 
 import XMonad.Actions.CopyWindow            -- (7) for closing a window via delete protocol
 import XMonad.ManageHook
+import XMonad.Hooks.ManageHelpers
+import XMonad.Layout.NoBorders
+
 
 import qualified Data.Map as M
 main = xmonad $ gnomeConfig
@@ -61,7 +64,9 @@ main = xmonad $ gnomeConfig
 
 myManageHook :: [ManageHook]
 myManageHook = 
-    [ resource  =? "Do"   --> doIgnore ]
+    [ resource  =? "Do"   --> doIgnore ,
+      isFullscreen --> doFullFloat
+    ]
 
 myLayoutHook = avoidStruts(Grid ||| tiled ||| Mirror tiled ||| Full)  -- (2) & (3) & (4)
     where
