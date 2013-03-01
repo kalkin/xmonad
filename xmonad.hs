@@ -67,12 +67,14 @@ main = do
             , ("M-a", sendMessage MirrorExpand)                       -- (6)
             , ("M-m", viewEmptyWorkspace)       -- (6)
             , ("M-n", refresh)                  -- (7)
-            , ("M-p", runOrRaisePrompt defaultXPConfig)
+            , ("M-p", spawn myDmenu)
             , ("M-z", sendMessage MirrorShrink)                       -- (6)
             ]
         `additionalKeys`
         -- NOTE: planeKeys requires xmonad-0.9 or greater
         M.toList (planeKeys mod4Mask GConf Finite)
+
+myDmenu = "exe=`dmenu_run ` && eval \"exec $exe\""
 
 
 myManageHook :: [ManageHook]
