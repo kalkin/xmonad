@@ -1,6 +1,6 @@
 -- Information
 -- {{{
---  Last Modified [ 2013-02-23 ]
+--  Last Modified [ 2013-03-01 ]
 -- File:    ~/.xmonad/xmonad.hs
 -- Author:  kalkin-
 -- Purpose  config file for the xmonad window manager
@@ -58,7 +58,7 @@ main = do
         , layoutHook    = smartBorders (myLayoutHook)
         , logHook = dynamicLogWithPP $ myPP xmproc
         , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
-        , workspaces    = ["www", "work", "chat", "mail", "5", "6", "7", "stat", "dwnl"] 
+        {-, workspaces    = ["www", "work", "chat", "mail", "5", "6", "7", "stat", "dwnl"] -}
         }
         `additionalKeysP` 
             [ ("M-c", kill1)                    -- (7)
