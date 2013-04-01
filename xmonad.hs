@@ -69,7 +69,7 @@ main = do
             , ("M-a", sendMessage MirrorExpand)                       -- (6)
             , ("M-m", viewEmptyWorkspace)       -- (6)
             , ("M-n", refresh)                  -- (7)
-            , ("M-p", spawn myDmenu)
+            , ("M-p", spawn "dmenu_run")
             , ("M-z", sendMessage MirrorShrink)                       -- (6)
             , ("M-<R>", sendMessage $ Go R)
             , ("M-<L>", sendMessage $ Go L)
@@ -77,7 +77,6 @@ main = do
             , ("M-<D>", sendMessage $ Go D)
             ]
 
-myDmenu = "exe=`dmenu_run ` && eval \"exec $exe\""
 
 
 myManageHook :: [ManageHook]
