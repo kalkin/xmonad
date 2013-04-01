@@ -42,6 +42,8 @@ import XMonad.Hooks.ManageDocks                 -- Manages the harmonic placemen
 import XMonad.Hooks.DynamicLog                  -- Used for dzen statusbar
 import XMonad.Util.Run(spawnPipe, hPutStrLn)    -- Used to spawn dzen
 import XMonad.Util.Loggers
+import XMonad.Layout.WindowNavigation
+
 
 import XMonad.Prompt
 import XMonad.Prompt.RunOrRaise
@@ -54,7 +56,7 @@ main = do
     xmproc <- spawnPipe "dzen2 -ta lr"
     xmonad $ gnomeConfig
         { terminal = "gnome-terminal -e 'screen -xRR everday'"
-        , modMask = mod4Mask -- set the mod key to the windows key
+        {-, modMask = mod2Mask -- set the mod key to the windows key-}
         , layoutHook    = smartBorders (myLayoutHook)
         , logHook = dynamicLogWithPP $ myPP xmproc
         , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
@@ -69,6 +71,10 @@ main = do
             , ("M-n", refresh)                  -- (7)
             , ("M-p", spawn myDmenu)
             , ("M-z", sendMessage MirrorShrink)                       -- (6)
+            , ("M-<R>", sendMessage $ Go R)
+            , ("M-<L>", sendMessage $ Go L)
+            , ("M-<U>", sendMessage $ Go U)
+            , ("M-<D>", sendMessage $ Go D)
             ]
 
 myDmenu = "exe=`dmenu_run ` && eval \"exec $exe\""
