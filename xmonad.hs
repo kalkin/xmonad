@@ -2,18 +2,6 @@
 -- {{{
 --  Last Modified [ 2013-03-01 ]
 -- File:    ~/.xmonad/xmonad.hs
--- Author:  kalkin-
--- Purpose  config file for the xmonad window manager
--- Notices: This file is actually kind of a haskell programm. So it's really
---          helpfull if you understand the basics of functional programming and
---          haskell.
---
--- Documentation: http://xmonad.org/documentation.html
---
--- For more documentation about the used Extensions (the import stuff) look at
--- http://xmonad.org/xmonad-docs/xmonad-contrib/XMonad-Doc-Extending.html
---
--- Powered by: A pack of Lucky Strike Click & Roll¹, boredom and Fedora!
 -- }}}
 --
 
