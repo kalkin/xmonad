@@ -27,7 +27,7 @@ import XMonad.Hooks.ManageDocks             -- (2)  automatically avoid covering
 import XMonad.Hooks.SetWMName
 
 -- Layout -- ----------------------------------------------------
-import XMonad.Layout.Grid                   -- (3)  grid layout
+import XMonad.Layout.HintedGrid                   -- (3)  grid layout
 import XMonad.Layout.ResizableTile          -- (4)  resize non-master windows too
 import XMonad.Layout.ResizableTile          -- (5)  resize non-master windows too
 
@@ -78,7 +78,7 @@ myManageHook =
       isFullscreen --> doFullFloat
     ]
 
-myLayoutHook = avoidStruts(Grid ||| tiled ||| Mirror tiled ||| Full)  -- (2) & (3) & (4)
+myLayoutHook = avoidStruts(Grid False ||| tiled ||| Mirror tiled ||| Full)  -- (2) & (3) & (4)
     where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = ResizableTall 1 delta ratio []
@@ -103,7 +103,7 @@ myPP h = defaultPP
                 "ResizableTall" -> "^i(/home/kalkin/dzen_bitmaps/tall.xbm)"
                 "Mirror ResizableTall" -> "^i(/home/kalkin/dzen_bitmaps/mtall.xbm)"
                 "Full" -> "^i(/home/kalkin/dzen_bitmaps/full.xbm)"
-                "Grid" -> "^i(/home/kalkin/dzen_bitmaps/grid.xbm)"
+                "Grid False" -> "^i(/home/kalkin/dzen_bitmaps/grid.xbm)"
 
                 )
         , ppSep               =   "  |  "
