@@ -15,7 +15,8 @@ import XMonad.Hooks.ManageDocks             -- (2)  automatically avoid covering
 import XMonad.Hooks.SetWMName
 
 -- Layout -- ----------------------------------------------------
-import XMonad.Layout.HintedGrid                   -- (3)  grid layout
+import XMonad.Layout.HintedGrid as HintedGrid                 -- (3)  grid layout
+import XMonad.Layout.GridVariants
 import XMonad.Layout.ResizableTile          -- (4)  resize non-master windows too
 import XMonad.Layout.ResizableTile          -- (5)  resize non-master windows too
 
@@ -30,7 +31,6 @@ import XMonad.Hooks.ManageDocks                 -- Manages the harmonic placemen
 import XMonad.Hooks.DynamicLog                  -- Used for dzen statusbar
 import XMonad.Util.Run(spawnPipe, hPutStrLn)    -- Used to spawn dzen
 import XMonad.Util.Loggers
-
 
 import XMonad.Prompt
 import XMonad.Prompt.RunOrRaise
@@ -57,7 +57,11 @@ main = do
             , ("M-m", viewEmptyWorkspace)       -- (6)
             , ("M-n", refresh)                  -- (7)
             , ("M-p", spawn "dmenu_run")
-            , ("M-z", sendMessage MirrorShrink)                       -- (6)
+            , ("M-z", sendMessage MirrorShrink)                       -- (5)
+            , ("M-f", sendMessage $ IncMasterCols 1)
+            , ("M-v", sendMessage $ IncMasterCols (-1))
+            , ("M-g", sendMessage $ IncMasterRows 1)
+            , ("M-b", sendMessage $ IncMasterRows (-1))
             ]
 
 myManageHook :: [ManageHook]
@@ -66,7 +70,13 @@ myManageHook =
       isFullscreen --> doFullFloat
     ]
 
-myLayoutHook = avoidStruts(Grid False ||| tiled ||| Mirror tiled ||| Full)  -- (2) & (3) & (4)
+myLayoutHook = avoidStruts( -- (2)
+                            HintedGrid.Grid False -- (3)
+                        ||| tiled   -- (4)
+                        ||| Mirror tiled 
+                        ||| Full 
+                        ||| SplitGrid XMonad.Layout.GridVariants.L 2 1 (3/5) (16/9) (5/100)
+                        )  
     where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = ResizableTall 1 delta ratio []
@@ -92,6 +102,7 @@ myPP h = defaultPP
                 "Mirror ResizableTall" -> "^i(/home/kalkin/dzen_bitmaps/mtall.xbm)"
                 "Full" -> "^i(/home/kalkin/dzen_bitmaps/full.xbm)"
                 "Grid False" -> "^i(/home/kalkin/dzen_bitmaps/grid.xbm)"
+                "SplitGrid" -> "S -> ^i(/home/kalkin/dzen_bitmaps/grid.xbm)"
 
                 )
         , ppSep               =   "  |  "
