@@ -17,8 +17,8 @@ import XMonad.Hooks.DynamicLog                  -- Used for dzen statusbar
 
 -- Layout -- ----------------------------------------------------
 import XMonad.Layout.HintedGrid as HintedGrid                 -- (3)  grid layout
-import XMonad.Layout.GridVariants
-import XMonad.Layout.ResizableTile          -- (4)  resize non-master windows too
+import XMonad.Layout.GridVariants           -- (4) used for splitgrid
+import XMonad.Layout.ResizableTile          -- (5)  resize non-master windows too
 
 -- Actions ---------------------------------------------------
 import XMonad.Actions.FindEmptyWorkspace    -- (5) for finding empty workspace and tagging windows to it 
@@ -38,7 +38,7 @@ main = do
     xmonad $ gnomeConfig
         { terminal = "gnome-terminal -e 'screen -xRR everday'"
         {-, modMask = mod2Mask -- set the mod key to the windows key-}
-        , layoutHook    = smartBorders (myLayoutHook) -- (9) XXX
+        , layoutHook    = myLayoutHook
         , logHook = dynamicLogWithPP $ myPP xmproc
         , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
         {-, workspaces    = ["www", "work", "chat", "mail", "5", "6", "7", "stat", "dwnl"] -}
@@ -47,7 +47,7 @@ main = do
             [ ("M-c", kill1)                    -- (6)
             , ("M-S-m", tagToEmptyWorkspace)    -- (6)
             , ("M-`", spawn "exe=`gnome-terminal -e /bin/zsh`")
-            , ("M-a", sendMessage MirrorExpand)                       -- (4)
+            , ("M-a", sendMessage MirrorExpand)                       -- (5)
             , ("M-m", viewEmptyWorkspace)       -- (5)
             , ("M-n", refresh)                  -- (6)
             , ("M-p", spawn "dmenu_run")
@@ -64,25 +64,18 @@ myManageHook =
       isFullscreen --> doFullFloat -- (8)
     ]
 
-myLayoutHook = avoidStruts( -- (2)
+myLayoutHook =  smartBorders (      -- (9)
+                    avoidStruts(    -- (2)
                             HintedGrid.Grid False -- (3)
-                        ||| tiled   -- (4)
+                        ||| tiled
                         ||| Mirror tiled 
                         ||| Full 
-                        ||| SplitGrid XMonad.Layout.GridVariants.L 2 1 (3/5) (16/9) (5/100)
-                        )  
+                        ||| splitGrid 
+                        ))
     where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = ResizableTall 1 delta ratio []
- 
-     -- The default number of windows in the master pane
-     nmaster = 1
- 
-     -- Default proportion of screen occupied by master pane
-     ratio   = 5/9
- 
-     -- Percent of screen to increment by when resizing panes
-     delta   = 3/100
+     tiled   = ResizableTall 1 (3/100) (5/9) [] -- (5)
+     splitGrid = SplitGrid XMonad.Layout.GridVariants.L 2 1 (3/5) (16/9) (5/100) -- (4)
 
 startupHook = setWMName "LG3D" -- For Java
 
