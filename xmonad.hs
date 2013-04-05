@@ -41,7 +41,6 @@ main = do
         , layoutHook    = myLayoutHook
         , logHook = dynamicLogWithPP $ myPP xmproc
         , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
-        {-, workspaces    = ["www", "work", "chat", "mail", "5", "6", "7", "stat", "dwnl"] -}
         }
         `additionalKeysP` 
             [ ("M-c", kill1)                    -- (6)
