@@ -32,14 +32,18 @@ import XMonad.Util.Loggers
 
 import qualified Data.Map as M
 
+dzenFGColor = "#ebac54"
+dzenBGColor = "#1B1D1E"
+
 
 main = do 
-    xmproc <- spawnPipe "dzen2 -ta lr"
-    xmonad $ gnomeConfig
+    dzenL <- spawnPipe "dzen2 -ta l -xs 1"
+    dzenR <- spawnPipe "dzen2 -ta l -xs 2"
+    xmonad $ gnomeConfig 
         { terminal = "gnome-terminal -e 'screen -xRR everday'"
         {-, modMask = mod2Mask -- set the mod key to the windows key-}
         , layoutHook    = myLayoutHook
-        , logHook = dynamicLogWithPP $ myPP xmproc
+        , logHook = myLogHook dzenL <+> myLogHook dzenR
         , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
         }
         `additionalKeysP` 
@@ -56,6 +60,9 @@ main = do
             , ("M-g", sendMessage $ IncMasterRows 1)
             , ("M-b", sendMessage $ IncMasterRows (-1))
             ]
+
+
+myLogHook h = dynamicLogWithPP $ myPP h
 
 myManageHook :: [ManageHook] -- (7)
 myManageHook = 
@@ -78,11 +85,13 @@ myLayoutHook =  smartBorders (      -- (9)
 
 startupHook = setWMName "LG3D" -- For Java
 
-
 -- some magic which does my the logging in the dzen bar.
 myPP h = defaultPP 
-        { ppCurrent           =   dzenColor "#ebac54" "#1B1D1E" . pad
-        , ppLayout            =   dzenColor "#ebac54" "#1B1D1E" .
+        { 
+          ppCurrent           =   dzenColor dzenFGColor dzenBGColor . wrap "<" ">"
+        , ppVisible           =   wrap "<" ">"
+        , ppHidden            =   wrap ("^i(/home/kalkin/dzen_bitmaps/has_win.xbm)") ""
+        , ppLayout            =   dzenColor dzenFGColor dzenBGColor .
                 (\x -> case x of
                 "ResizableTall" -> "^i(/home/kalkin/dzen_bitmaps/tall.xbm)"
                 "Mirror ResizableTall" -> "^i(/home/kalkin/dzen_bitmaps/mtall.xbm)"
@@ -93,6 +102,6 @@ myPP h = defaultPP
                 )
         , ppSep               =   "  |  "
         , ppTitle             =   (" " ++) . dzenColor "white" "#1B1D1E" . dzenEscape
-        , ppExtras = [ date "%d.%m.%Y %R" ]
-        , ppOutput   = hPutStrLn h
+        , ppExtras = [ date "%R %d, %b %Y" ]
+        , ppOutput = hPutStrLn h
         }
