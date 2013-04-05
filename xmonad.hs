@@ -13,28 +13,22 @@ import XMonad.Util.EZConfig
 -- Hooks -----------------------------------------------------
 import XMonad.Hooks.ManageDocks             -- (2)  automatically avoid covering my status bar with windows
 import XMonad.Hooks.SetWMName
+import XMonad.Hooks.DynamicLog                  -- Used for dzen statusbar
 
 -- Layout -- ----------------------------------------------------
 import XMonad.Layout.HintedGrid as HintedGrid                 -- (3)  grid layout
 import XMonad.Layout.GridVariants
 import XMonad.Layout.ResizableTile          -- (4)  resize non-master windows too
-import XMonad.Layout.ResizableTile          -- (5)  resize non-master windows too
 
 -- Actions ---------------------------------------------------
-import XMonad.Actions.FindEmptyWorkspace    -- (6) for finding empty workspace and tagging windows to it 
-import XMonad.Actions.CopyWindow            -- (7) for closing a window via delete protocol
-import XMonad.ManageHook
-import XMonad.Hooks.ManageHelpers
-import XMonad.Layout.NoBorders
+import XMonad.Actions.FindEmptyWorkspace    -- (5) for finding empty workspace and tagging windows to it 
+import XMonad.Actions.CopyWindow            -- (6) for closing a window via delete protocol
+import XMonad.ManageHook                    -- (7) an EDSL for ManageHook 
+import XMonad.Hooks.ManageHelpers           -- (8) some helpers used with ManageHook
+import XMonad.Layout.NoBorders              -- (9) used for smarter removing borders i.e mplayer
 
-import XMonad.Hooks.ManageDocks                 -- Manages the harmonic placement of docs and windows
-import XMonad.Hooks.DynamicLog                  -- Used for dzen statusbar
 import XMonad.Util.Run(spawnPipe, hPutStrLn)    -- Used to spawn dzen
 import XMonad.Util.Loggers
-
-import XMonad.Prompt
-import XMonad.Prompt.RunOrRaise
-
 
 import qualified Data.Map as M
 
@@ -44,18 +38,18 @@ main = do
     xmonad $ gnomeConfig
         { terminal = "gnome-terminal -e 'screen -xRR everday'"
         {-, modMask = mod2Mask -- set the mod key to the windows key-}
-        , layoutHook    = smartBorders (myLayoutHook)
+        , layoutHook    = smartBorders (myLayoutHook) -- (9) XXX
         , logHook = dynamicLogWithPP $ myPP xmproc
         , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
         {-, workspaces    = ["www", "work", "chat", "mail", "5", "6", "7", "stat", "dwnl"] -}
         }
         `additionalKeysP` 
-            [ ("M-c", kill1)                    -- (7)
-            , ("M-S-m", tagToEmptyWorkspace)    -- (7)
+            [ ("M-c", kill1)                    -- (6)
+            , ("M-S-m", tagToEmptyWorkspace)    -- (6)
             , ("M-`", spawn "exe=`gnome-terminal -e /bin/zsh`")
-            , ("M-a", sendMessage MirrorExpand)                       -- (6)
-            , ("M-m", viewEmptyWorkspace)       -- (6)
-            , ("M-n", refresh)                  -- (7)
+            , ("M-a", sendMessage MirrorExpand)                       -- (4)
+            , ("M-m", viewEmptyWorkspace)       -- (5)
+            , ("M-n", refresh)                  -- (6)
             , ("M-p", spawn "dmenu_run")
             , ("M-z", sendMessage MirrorShrink)                       -- (5)
             , ("M-f", sendMessage $ IncMasterCols 1)
@@ -64,10 +58,10 @@ main = do
             , ("M-b", sendMessage $ IncMasterRows (-1))
             ]
 
-myManageHook :: [ManageHook]
+myManageHook :: [ManageHook] -- (7)
 myManageHook = 
-    [ resource  =? "Do"   --> doIgnore ,
-      isFullscreen --> doFullFloat
+    [ resource  =? "Do"   --> doIgnore , -- (8)
+      isFullscreen --> doFullFloat -- (8)
     ]
 
 myLayoutHook = avoidStruts( -- (2)
