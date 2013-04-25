@@ -45,6 +45,7 @@ main = do
         , layoutHook    = myLayoutHook
         , logHook = myLogHook dzenL <+> myLogHook dzenR
         , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
+        , startupHook = setWMName "LG3D"
         }
         `additionalKeysP` 
             [ ("M-c", kill1)                    -- (6)
@@ -82,8 +83,6 @@ myLayoutHook =  smartBorders (      -- (9)
      -- default tiling algorithm partitions the screen into two panes
      tiled   = ResizableTall 1 (3/100) (5/9) [] -- (5)
      splitGrid = SplitGrid XMonad.Layout.GridVariants.L 2 1 (3/5) (16/9) (5/100) -- (4)
-
-startupHook = setWMName "LG3D" -- For Java
 
 -- some magic which does my the logging in the dzen bar.
 myPP h = defaultPP 
