@@ -31,6 +31,8 @@ import XMonad.Util.Run(spawnPipe, hPutStrLn)    -- Used to spawn dzen
 import XMonad.Util.Loggers
 
 import qualified Data.Map as M
+import qualified XMonad.StackSet as W
+import XMonad.Actions.CopyWindow
 
 dzenFGColor = "#ebac54"
 dzenBGColor = "#1B1D1E"
@@ -48,7 +50,7 @@ main = do
         , startupHook = setWMName "LG3D"
         }
         `additionalKeysP` 
-            [ ("M-c", kill1)                    -- (6)
+            ([ ("M-c", kill1)                    -- (6)
             , ("M-S-m", tagToEmptyWorkspace)    -- (6)
             , ("M-`", spawn "exe=`gnome-terminal -e /bin/zsh`")
             , ("M-a", sendMessage MirrorExpand)                       -- (5)
@@ -62,6 +64,17 @@ main = do
             , ("M-b", sendMessage $ IncMasterRows (-1))
             , ("M-<Print>", spawn "gnome-screenshot -i")
             ]
+            ++
+            [ ("M-" ++ m ++ [k], windows $ f i)
+                                            -- this must be changed if workspaces is customized...
+                            | (i, k) <- zip (XMonad.workspaces gnomeConfig) (['1' .. '9'] ++ ['0', '-'])
+                            , (f, m) <- [ (W.greedyView, "")
+                                        , (W.shift, "S-")
+                                        , (copy, "C-")
+                                        ]
+            ])
+
+
 
 
 myLogHook h = dynamicLogWithPP $ myPP h
