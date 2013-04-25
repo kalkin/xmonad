@@ -60,6 +60,7 @@ main = do
             , ("M-v", sendMessage $ IncMasterCols (-1))
             , ("M-g", sendMessage $ IncMasterRows 1)
             , ("M-b", sendMessage $ IncMasterRows (-1))
+            , ("M-<Print>", spawn "gnome-screenshot -i")
             ]
 
 
