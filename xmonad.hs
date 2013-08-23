@@ -33,14 +33,14 @@ import XMonad.Util.Loggers
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 import XMonad.Actions.CopyWindow
+import Solarized
 
-dzenFGColor = "#ebac54"
-dzenBGColor = "#1B1D1E"
 
+myXPConfig = defaultXPConfig
 
 main = do 
-    dzenL <- spawnPipe "dzen2 -ta l -xs 1"
-    dzenR <- spawnPipe "dzen2 -ta l -xs 2"
+    dzenL <- spawnPipe "dzen2 -ta l -xs 1 -bg '#073642' -fg '#839496'"
+    dzenR <- spawnPipe "dzen2 -ta l -xs 2 -bg '#073642' -fg '#839496'"
     xmonad $ gnomeConfig 
         { terminal = "gnome-terminal -e 'screen -xRR everday'"
         {-, modMask = mod2Mask -- set the mod key to the windows key-}
@@ -48,6 +48,8 @@ main = do
         , logHook = myLogHook dzenL <+> myLogHook dzenR
         , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
         , startupHook = setWMName "LG3D"
+        , normalBorderColor = solarizedBase01
+        , focusedBorderColor = solarizedRed
         }
         `additionalKeysP` 
             ([ ("M-c", kill1)                    -- (6)
@@ -56,7 +58,7 @@ main = do
             , ("M-a", sendMessage MirrorExpand)                       -- (5)
             , ("M-m", viewEmptyWorkspace)       -- (5)
             , ("M-n", refresh)                  -- (6)
-            , ("M-p", spawn "dmenu_run")
+            , ("M-p", spawn "dmenu_run -nb '#073642' -nf '#839496' -sf '#cb4b16'")
             , ("M-z", sendMessage MirrorShrink)                       -- (5)
             , ("M-f", sendMessage $ IncMasterCols 1)
             , ("M-v", sendMessage $ IncMasterCols (-1))
@@ -73,7 +75,6 @@ main = do
                                         , (copy, "C-")
                                         ]
             ])
-
 
 
 
@@ -101,10 +102,10 @@ myLayoutHook =  smartBorders (      -- (9)
 -- some magic which does my the logging in the dzen bar.
 myPP h = defaultPP 
         { 
-          ppCurrent           =   dzenColor dzenFGColor dzenBGColor . wrap "<" ">"
-        , ppVisible           =   wrap "<" ">"
-        , ppHidden            =   wrap ("^i(/home/kalkin/dzen_bitmaps/has_win.xbm)") ""
-        , ppLayout            =   dzenColor dzenFGColor dzenBGColor .
+          ppCurrent           =   dzenColor solarizedViolet solarizedBase02  . wrap "<" ">"
+        , ppVisible           =   dzenColor solarizedBase0 solarizedBase02 . wrap "<" ">"
+        , ppHidden            =   dzenColor solarizedBase00 solarizedBase02 . wrap ("^i(/home/kalkin/dzen_bitmaps/has_win.xbm)") ""
+        , ppLayout            =   dzenColor solarizedBase0 solarizedBase02 .
                 (\x -> case x of
                 "ResizableTall" -> "^i(/home/kalkin/dzen_bitmaps/tall.xbm)"
                 "Mirror ResizableTall" -> "^i(/home/kalkin/dzen_bitmaps/mtall.xbm)"
@@ -113,8 +114,8 @@ myPP h = defaultPP
                 "SplitGrid" -> "S -> ^i(/home/kalkin/dzen_bitmaps/grid.xbm)"
 
                 )
-        , ppSep               =   "  |  "
-        , ppTitle             =   (" " ++) . dzenColor "white" "#1B1D1E" . dzenEscape
+        , ppSep               =  dzenColor solarizedBase01 solarizedBase02 "  |  "
+        , ppTitle             =   (" " ++) . dzenColor solarizedViolet solarizedBase02  . dzenEscape
         , ppExtras = [ date "%R %d, %b %Y" ]
         , ppOutput = hPutStrLn h
         }
