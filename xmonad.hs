@@ -42,8 +42,8 @@ main = do
     dzenL <- spawnPipe "dzen2 -ta l -xs 1 -bg '#073642' -fg '#839496'"
     dzenR <- spawnPipe "dzen2 -ta l -xs 2 -bg '#073642' -fg '#839496'"
     xmonad $ gnomeConfig 
-        { terminal = "gnome-terminal -e 'screen -xRR everday'"
-        {-, modMask = mod2Mask -- set the mod key to the windows key-}
+        { terminal = "urxvt256c"
+        , modMask = mod4Mask -- set the mod key to the windows key
         , layoutHook    = myLayoutHook
         , logHook = myLogHook dzenL <+> myLogHook dzenR
         , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
@@ -54,7 +54,7 @@ main = do
         `additionalKeysP` 
             ([ ("M-c", kill1)                    -- (6)
             , ("M-S-m", tagToEmptyWorkspace)    -- (6)
-            , ("M-`", spawn "exe=`gnome-terminal -e /bin/zsh`")
+            , ("M-`", spawn "exe=`urxvt256c -e /bin/zsh`")
             , ("M-a", sendMessage MirrorExpand)                       -- (5)
             , ("M-m", viewEmptyWorkspace)       -- (5)
             , ("M-n", refresh)                  -- (6)
