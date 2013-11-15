@@ -36,7 +36,6 @@ import XMonad.Actions.CopyWindow
 import Solarized
 
 
-myXPConfig = defaultXPConfig
 
 main = do 
     dzenL <- spawnPipe "dzen2 -ta l -xs 1 -bg '#073642' -fg '#839496'"
