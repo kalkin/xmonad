@@ -111,7 +111,7 @@ myPP h = defaultPP
                 "Mirror ResizableTall" -> "^i(/home/kalkin/dzen_bitmaps/mtall.xbm)"
                 "Full" -> "^i(/home/kalkin/dzen_bitmaps/full.xbm)"
                 "Grid False" -> "^i(/home/kalkin/dzen_bitmaps/grid.xbm)"
-                "SplitGrid" -> "S -> ^i(/home/kalkin/dzen_bitmaps/grid.xbm)"
+                _ -> x
 
                 )
         , ppSep               =  dzenColor solarizedBase01 solarizedBase02 "  |  "
