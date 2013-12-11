@@ -34,6 +34,10 @@ import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 import XMonad.Actions.CopyWindow
 import Solarized
+import XMonad.Prompt
+import XMonad.Prompt.RunOrRaise
+import XMonad.Prompt.Shell
+import XMonad.Prompt.XMonad
 
 
 
@@ -64,6 +68,16 @@ main = do
             , ("M-g", sendMessage $ IncMasterRows 1)
             , ("M-b", sendMessage $ IncMasterRows (-1))
             , ("M-<Print>", spawn "gnome-screenshot -i")
+            , ("M-\\", shellPrompt defaultXPConfig)
+            , ("M-s", spawn "pgdown")
+            , ("M-j", windows W.focusMaster)
+            , ("M-i", windows W.focusUp)
+            , ("M-k", windows W.focusDown)
+            , ("M-l", runOrRaisePrompt defaultXPConfig)
+            , ("M-S-l", xmonadPrompt defaultXPConfig)
+            , ("M-J", windows W.swapMaster)
+            , ("M-I", windows W.swapUp)
+            , ("M-K", windows W.swapDown)
             ]
             )
 
