@@ -40,7 +40,7 @@ import Solarized
 main = do 
     dzenL <- spawnPipe "dzen2 -ta l -xs 1 -bg '#073642' -fg '#839496'"
     dzenR <- spawnPipe "dzen2 -ta l -xs 2 -bg '#073642' -fg '#839496'"
-    xmonad $ gnomeConfig 
+    xmonad $ defaultConfig
         { terminal = "urxvt256c"
         , modMask = mod4Mask -- set the mod key to the windows key
         , layoutHook    = myLayoutHook
