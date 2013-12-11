@@ -57,7 +57,7 @@ main = do
         `additionalKeysP` 
             ([ ("M-c", kill1)                    -- (6)
             , ("M-S-m", tagToEmptyWorkspace)    -- (6)
-            , ("M-`", spawn "exe=`urxvt256c -e /bin/zsh`")
+            , ("M-`", spawn "urxvt256c -e /bin/zsh")
             , ("M-a", sendMessage MirrorExpand)                       -- (5)
             , ("M-m", viewEmptyWorkspace)       -- (5)
             , ("M-n", refresh)                  -- (6)
