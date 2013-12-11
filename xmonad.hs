@@ -65,15 +65,7 @@ main = do
             , ("M-b", sendMessage $ IncMasterRows (-1))
             , ("M-<Print>", spawn "gnome-screenshot -i")
             ]
-            ++
-            [ ("M-" ++ m ++ [k], windows $ f i)
-                                            -- this must be changed if workspaces is customized...
-                            | (i, k) <- zip (XMonad.workspaces gnomeConfig) (['1' .. '9'] ++ ['0', '-'])
-                            , (f, m) <- [ (W.greedyView, "")
-                                        , (W.shift, "S-")
-                                        , (copy, "C-")
-                                        ]
-            ])
+            )
 
 
 
