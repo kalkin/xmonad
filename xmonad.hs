@@ -82,14 +82,11 @@ myLayoutHook =  smartBorders (      -- (9)
                             HintedGrid.Grid False -- (3)
                         ||| tiled
                         ||| Mirror tiled 
-                        ||| Full 
-                        ||| splitGrid 
-                        ))
+                        ||| Full
+                         ))
     where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = ResizableTall 1 (3/100) (5/9) [] -- (5)
-     splitGrid = SplitGrid XMonad.Layout.GridVariants.L 2 1 (3/5) (16/9) (5/100) -- (4)
-
 -- some magic which does my the logging in the dzen bar.
 myPP h = defaultPP 
         { 
