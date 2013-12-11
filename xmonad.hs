@@ -46,7 +46,7 @@ main = do
         , layoutHook    = myLayoutHook
         , logHook = myLogHook dzenL <+> myLogHook dzenR
         , manageHook = manageHook gnomeConfig <+> composeAll myManageHook
-        , startupHook = setWMName "LG3D"
+        {-, startupHook = setWMName "LG3D"-}
         , normalBorderColor = solarizedBase01
         , focusedBorderColor = solarizedRed
         }
